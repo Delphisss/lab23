@@ -1,4 +1,5 @@
 #include <windows.h>
+#include <stdio.h>
 
 LRESULT CALLBACK WndProc(HWND,UINT , WPARAM ,LPARAM);
 /* This is where all the input to the window goes to */
@@ -17,7 +18,37 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam) 
 				Button = CreateWindow("BUTTON","*",WS_VISIBLE|WS_CHILD|WS_BORDER,124,120,28,25,hwnd,(HMENU) 3,NULL,NULL);
 				Button = CreateWindow("BUTTON","/",WS_VISIBLE|WS_CHILD|WS_BORDER,154,120,28,25,hwnd,(HMENU) 4,NULL,NULL);
 				break;
-			
+			case WM_COMMAND: // คิดเลข
+				if(LOWORD(wParam)!=0){
+					int gwtstat1 =0,gwtstat2 =0;
+					gwtstat1 = GetWindowText(Text_Box1,&Text1[0],20);
+					gwtstat2 = GetWindowText(Text_Box2,&Text2[0],20);
+				}
+				if(LOWORD(wParam)==1){
+					float re=atof(Text1)+atof(Text2);
+					char t[100];
+					sprintf(t, "%f", re);
+					:: MessageBox(hwnd,t,"Result",MB_OK);
+				}
+				if(LOWORD(wParam)==2){
+					float re=atof(Text1)-atof(Text2);
+					char t[100];
+					sprintf(t, "%f", re);
+					:: MessageBox(hwnd,t,"Result",MB_OK);
+				}
+				if(LOWORD(wParam)==3){
+					float re=atof(Text1)*atof(Text2);
+					char t[100];
+					sprintf(t, "%f", re);
+					:: MessageBox(hwnd,t,"Result",MB_OK);
+				}
+				if(LOWORD(wParam)==4){
+					float re=atof(Text1)/atof(Text2);
+					char t[100];
+					sprintf(t, "%f", re);
+					:: MessageBox(hwnd,t,"Result",MB_OK);
+				}
+				break;			
 			case WM_DESTROY:
 				PostQuitMessage(0);
 				break;
@@ -41,7 +72,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	wc.hCursor	 = LoadCursor(NULL, IDC_ARROW);
 	
 	/* White, COLOR_WINDOW is just a #define for a system color, try Ctrl+Clicking it */
-	wc.hbrBackground = (HBRUSH)(COLOR_WINDOW+1);
+	wc.hbrBackground = (HBRUSH)(COLOR_WINDOW+25); //สี1-26
 	wc.lpszClassName = "WindowClass";
 	wc.hIcon	 = LoadIcon(NULL, IDI_APPLICATION); /* Load a standard icon */
 	wc.hIconSm	 = LoadIcon(NULL, IDI_APPLICATION); /* use the name "A" to use the project icon */
@@ -66,8 +97,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		MessageBox(NULL, "Window Creation Failed!","Error!",MB_ICONEXCLAMATION|MB_OK);
 		return 0;
 	}
-
-
 	/*
 		This is the heart of our program where all input is processed and 
 		sent to WndProc. Note that GetMessage blocks code flow until it receives something, so
